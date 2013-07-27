@@ -77,7 +77,7 @@ public class HumanizeNumber {
 			case 10: return "Ten";
 			case 20: return "Twenty";
 			case 30: return "Thirty";
-			case 40: return "Fourty";
+			case 40: return "Forty";
 			case 50: return "Fifty";
 			case 60: return "Sixty";
 			case 70: return "Seventy";
