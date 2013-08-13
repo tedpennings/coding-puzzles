@@ -1,7 +1,6 @@
 # Numeric Diamonds from Code Golf
 # 12 August 2013
 # http://codegolf.com/numeric-diamonds
-
 def diamond(sq)
 	root = (sq**0.5).to_i
 	w=sq.to_s.length
@@ -26,8 +25,8 @@ def diamond(sq)
 					num = sq - (ll-l) - ((i-1) * (root-1))
 				end
 				num = num.to_s
-				num = (" " * ((w - num.length) )) + num + (" " * ((w - num.length) / 2))
-				out<<(num.to_s)
+				out<<(" " * ((w - num.length))) unless i == c or i == 1
+				out<<num
 				out<<(" "*w) unless i == c
 			end
 			puts " " * (sp*w) + out
