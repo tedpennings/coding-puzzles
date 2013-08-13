@@ -1,39 +1,39 @@
 # Numeric Diamonds from Code Golf
 # 12 August 2013
 # http://codegolf.com/numeric-diamonds
-require "matrix"
 
-sq = STDIN.read.chomp.to_i
-root = (sq**0.5).to_i
-w=sq.to_s.length
-ll=(root*2-1)
+def diamond(sq)
+	root = (sq**0.5).to_i
+	w=sq.to_s.length
+	ll=(root*2-1)
 
-nums = Matrix.build(root, root) {|row, col| (col+1) + (row*root) }
+	1.upto(ll) do |l|
+		x = (l <= sq) ? l : l-sq
+		sp = (root-x).abs 
+		c = root - sp
 
-debug = true
-
-puts nums.inspect if debug
-puts nums.to_s if debug
-
-1.upto(ll).each do |l|
-	x = (l <= sq) ? l : l-sq
-	sp = (root-x).abs 
-	c = root - sp
-	puts "#{sp} #{root-sp} - #{c}" if debug
-
-	case l
-	when 1
-		puts " " * (sp*w) + "1"   unless debug
-	when ll
-		puts " " * (sp*w) + sq.to_s  unless debug
-	else 
-		out=""
-		1.upto(c) do |i|
-			#out<<("h" + (" "*w))
-			a = nums[i-1,i]
-			#puts "zzz - #{c} #{l} #{a}"
-			out << ( a.to_s + (" "*w))
-		end
-		puts " " * (sp*w) + out unless debug
-	end 
+		case l
+		when 1
+			puts " " * (sp*w) + "1"
+		when ll
+			puts " " * (sp*w) + sq.to_s
+		else 
+			out=""
+			1.upto(c) do |i|
+				if l <= root
+					num = ((((l-1)*root) + 1) - ((i-1) * (root-1)))
+				else
+					num = sq - (ll-l) - ((i-1) * (root-1))
+				end
+				num = num.to_s
+				num = (" " * ((w - num.length) )) + num + (" " * ((w - num.length) / 2))
+				out<<(num.to_s)
+				out<<(" "*w) unless i == c
+			end
+			puts " " * (sp*w) + out
+		end 
+	end
 end
+diamond 9
+diamond 36
+diamond 100
