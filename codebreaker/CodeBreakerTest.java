@@ -151,26 +151,37 @@ public class CodeBreakerTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void evaulateGuessDoesNotAcceptANullListOfColors() {
+  public void theCodeBreakerConstructorDoesNotAcceptASparseList() {
+    new CodeBreaker(asList(RED, YELLOW, null, VIOLET));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void evaluateGuessDoesNotAcceptANullListOfColors() {
     List<CodeBreakerColor> actualColors = asList(CHARTREUSE, BLUE, YELLOW, GREEN);
     CodeBreaker breaker = new CodeBreaker(actualColors);
     breaker.evaluateGuess(null);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void evaulateGuessDoesNotAcceptAListWithTooFewColors() {
+  public void evaluateGuessDoesNotAcceptAListWithTooFewColors() {
     List<CodeBreakerColor> actualColors = asList(CHARTREUSE, BLUE, YELLOW, GREEN);
     CodeBreaker breaker = new CodeBreaker(actualColors);
     breaker.evaluateGuess(asList(RED,BLUE));
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void tevaulateGuessDoesNotAcceptAListWithTooManyColors() {
+  public void evaluateGuessDoesNotAcceptAListWithTooManyColors() {
     List<CodeBreakerColor> actualColors = asList(CHARTREUSE, BLUE, YELLOW, GREEN);
     CodeBreaker breaker = new CodeBreaker(actualColors);
     breaker.evaluateGuess(asList(RED,GREEN,BLUE,ORANGE,CHARTREUSE));
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void evaluateGuessDoesNotAcceptASparseList() {
+    List<CodeBreakerColor> actualColors = asList(CHARTREUSE, BLUE, YELLOW, GREEN);
+    CodeBreaker breaker = new CodeBreaker(actualColors);
+    breaker.evaluateGuess(asList(RED,GREEN, null,CHARTREUSE));
+  }
 
   private void assertExactMatches(int countToAssert, int[] result) {
     assertThat("Incorrect number of exact matches", result[0], is(equalTo(countToAssert)));
