@@ -8,7 +8,6 @@ public class IsPowerOfThree {
 	
 	public static boolean isPowerOfThree(int x) {
 		if (x < 0) throw new IllegalArgumentException();
-		// 0 and 1 fall through to true
 		while (x > 1) {
 			if (x % 3 == 0) {
 				x = x/3;
@@ -16,6 +15,7 @@ public class IsPowerOfThree {
 				return false;
 			}
 		}
+		// 0, 1 and cubes fall through to true
 		return true;
 	}
 
