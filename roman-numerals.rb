@@ -40,4 +40,4 @@ def print_it numeral
   puts "#{numeral} is #{translated}"
 end
 
-["L", "X", "XXIX", "IVXLCDM", "CCXXXIII", "CCCLXXVIII", "XCIX"].each { |i| print_it i }
+["L", "X", "XXIX", "IVXLCDM", "CCXXXIII", "CCCLXXVIII", "XCIX", "MCMXLIV"].each { |i| print_it i }
