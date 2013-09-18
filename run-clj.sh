@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# fail on compiler or fetch errors
+set -o pipefail
+set -e
+
 CLOJURE_VERSION="1.5.1"
 CLOJURE_MATH_VERSION="0.0.2"
 
