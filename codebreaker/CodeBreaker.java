@@ -9,11 +9,14 @@ import java.util.List;
  * @author Ted Pennings
  */
 public class CodeBreaker {
+
+  private static final int NUMBER_OF_COLORS = 4;
+
   private final List<CodeBreakerColor> colors;
 
   public CodeBreaker(List<CodeBreakerColor> colors) {
     validateColors(colors);
-    // defensive copy
+    // store a defensive copy
     this.colors = Collections.unmodifiableList(new ArrayList<CodeBreakerColor>(colors));
   }
 
@@ -25,8 +28,8 @@ public class CodeBreaker {
   }
 
   private boolean[] findExactMatches(List<CodeBreakerColor> guess) {
-    boolean[] exactMatches = new boolean[4];
-    for (int i = 0; i < 4; i++) {
+    boolean[] exactMatches = new boolean[NUMBER_OF_COLORS];
+    for (int i = 0; i < NUMBER_OF_COLORS; i++) {
       CodeBreakerColor candidate = guess.get(i);
       CodeBreakerColor actual = colors.get(i);
       exactMatches[i] = candidate.equals(actual);
@@ -37,7 +40,7 @@ public class CodeBreaker {
   private int countWrongPositionMatches(List<CodeBreakerColor> guess, boolean[] exactMatches) {
     int otherMatches = 0;
     List<CodeBreakerColor> alreadyMatchedColors = new ArrayList<CodeBreakerColor>();
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < NUMBER_OF_COLORS; i++) {
       if (exactMatches[i]) {
         // there is an exact match at this color guess position
         // skip this color and do not double-count match per game rules
@@ -76,7 +79,7 @@ public class CodeBreaker {
 
   private int countExactMatchInstancesOf(CodeBreakerColor color, List<CodeBreakerColor> haystack, boolean[] exactMatches) {
     int matches = 0;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < NUMBER_OF_COLORS; i++) {
       if (exactMatches[i]) {
         CodeBreakerColor needle = haystack.get(i);
         if (needle.equals(color)) {
@@ -95,9 +98,14 @@ public class CodeBreaker {
     return count;
   }
 
-  private void validateColors(List<CodeBreakerColor> colors) {
-    if (colors == null || colors.size() != 4) {
-      throw new IllegalArgumentException("Expected a list of four colors. Received: " + colors);
+  private int[] resultFor(int rightColorRightPosition, int rightColorWrongPosition) {
+    return new int[] { rightColorRightPosition, rightColorWrongPosition};
+  }
+
+  private static void validateColors(List<CodeBreakerColor> colors) {
+    // static to avoid stupid mistakes since this is used in the constructor
+    if (colors == null || colors.size() != NUMBER_OF_COLORS) {
+      throw new IllegalArgumentException("Expected a list of " + NUMBER_OF_COLORS + " colors. Received: " + colors);
     }
     for (CodeBreakerColor color : colors) {
       if (color == null) {
@@ -105,10 +113,6 @@ public class CodeBreaker {
         throw new IllegalArgumentException("Expected a list with all non-null entries. Received: " + colors);
       }
     }
-  }
-
-  private int[] resultFor(int rightColorRightPosition, int rightColorWrongPosition) {
-    return new int[] { rightColorRightPosition, rightColorWrongPosition};
   }
 
 }
