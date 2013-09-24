@@ -19,6 +19,17 @@
           (apply str 
             (clojure.set/difference candidate-color-set colors))))))))
 
+(defn drop-elements-by-indexes [haystack indexes]
+  "Returns a copy of haystack without the values at the indexes in the elements array"
+  (keep-indexed
+    (fn [index item]
+      (if 
+        (some #{index} indexes)
+        nil
+        item))
+    haystack))
+
+
 (defn find-exact-matches [guess answer]
   "Returns positions of the exact matches -- color and position -- between guess and answer.
    Note: This is not the final answer for exact matches."
@@ -34,8 +45,10 @@
 
 (defn find-inexact-matches [guess answer exact-matches]
   "Returns count of the inexact matches -- color and position -- between both sets"
-  (comment "TODO implement inexact matches and remove stubbed -1 answer")
-  -1)
+  (let [without-exact-matches (drop-elements-by-indexes guess exact-matches)]
+    (count (clojure.set/intersection 
+      (set without-exact-matches) 
+      (set answer)))))
 
 (defn evaluate-guess [guess answer]
   "Evaluates a guess given an answer"

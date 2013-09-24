@@ -32,7 +32,7 @@
     (comment "This test passes by no exception being thrown")
       (validate-color-seq [:red :green :blue :chartreuse])))
 
-(deftest exact-matches
+(deftest game-internals-find-exact-matches
   (comment "TODO consider if this should be here... find-exact-matches should probably be private")
   (testing "A perfect set of exact matches can be identified"
     (let [colors [:yellow :green :blue :violet]]
@@ -63,11 +63,54 @@
     (let [colors1 [:red :orange :pink :green]
           colors2 [:blue :violet :pink :chartreuse]]
       (is (= 1 (first (evaluate-guess colors1 colors2))))))
-  (testing "An empty list is returned when there are no exact matches"
+  (testing "Zero is returned when there are no exact matches"
     (let [colors1 [:red :orange :yellow :green]
           colors2 [:blue :violet :pink :chartreuse]]
       (is (= 0 (first (evaluate-guess colors1 colors2)))))))
 
-(comment "TODO test inexact matches")
+(deftest game-play-inexact
+  (testing "A full set of inexact matches can be identified"
+    (let [colors [:blue :violet :yellow :green]]
+      (is (= 4 (second (evaluate-guess colors (reverse colors)))))))
+  (testing "A set of half inexact matches can be identified"
+    (let [colors1 [:yellow :green :blue :orange]
+          colors2 [:chartreuse :violet :yellow :green]]
+      (is (= 2 (second (evaluate-guess colors1 colors2))))))
+  (testing "A single inexact matches can be identified"
+    (let [colors1 [:red :orange :green :pink]
+          colors2 [:blue :violet :pink :chartreuse]]
+      (is (= 1 (second (evaluate-guess colors1 colors2))))))
+  (testing "Two inexact matches for the same color only report as a single inexact match per game rules"
+    (let [colors1 [:red :red :yellow :green]
+          colors2 [:blue :violet :red :red]]
+      (is (= 1 (second (evaluate-guess colors1 colors2))))))
+  (testing "Zero is returned when there are no inexact matches"
+    (let [colors1 [:red :orange :yellow :green]
+          colors2 [:blue :violet :pink :chartreuse]]
+      (is (= 0 (second (evaluate-guess colors1 colors2)))))))
+
+(deftest game-play-both-exact-and-inexact
+  (testing "A full set of exact matches can be identified and also returns zero inexact matches"
+    (let [colors [:blue :violet :yellow :green]]
+      (is (= [4 0] (evaluate-guess colors colors)))))
+  (testing "A full set of inexact matches can be identified  and also returns zero exact matches"
+    (let [colors [:blue :violet :yellow :green]]
+      (is (= [0 4] (evaluate-guess colors (reverse colors))))))
+  (testing "A set of half inexact matches can be identified and includes zero exact matches"
+    (let [colors1 [:yellow :green :blue :orange]
+          colors2 [:chartreuse :violet :yellow :green]]
+      (is (= [0 2] (evaluate-guess colors1 colors2)))))
+  (testing "A single inexact matches can be identified and includes zero exact matches"
+    (let [colors1 [:red :orange :green :pink]
+          colors2 [:blue :violet :pink :chartreuse]]
+      (is (= [0 1] (evaluate-guess colors1 colors2)))))
+  (testing "An exact match and an inexact match can occur for the same color"
+    (let [colors1 [:blue :chartreuse :blue :pink]
+          colors2 [:blue :violet :yellow :blue]]
+      (is (= [1 1] (evaluate-guess colors1 colors2)))))
+  (testing "Zero is returned twice when there are no exact or inexact matches"
+    (let [colors1 [:red :orange :yellow :green]
+          colors2 [:blue :violet :pink :chartreuse]]
+      (is (= [0 0] (evaluate-guess colors1 colors2))))))
 
 (run-tests)
