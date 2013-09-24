@@ -55,7 +55,7 @@
   (map validate-color-seq [guess answer])
   (let [exact-matches 
         (find-exact-matches guess answer)]
-    (let [inexact-matches
+    (let [inexact-match-count
         (find-inexact-matches guess answer exact-matches)]
-      [(count exact-matches) inexact-matches])))
+      [(count exact-matches) inexact-match-count])))
 
