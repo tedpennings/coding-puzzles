@@ -43,11 +43,11 @@
           matches))
       matches)))
 
-(defn find-inexact-matches [guess answer exact-matches]
+(defn count-inexact-matches [guess answer exact-matches]
   "Returns count of the inexact matches -- color and position -- between both sets"
-  (let [without-exact-matches (drop-elements-by-indexes guess exact-matches)]
+  (let [guess-without-exact-matches (drop-elements-by-indexes guess exact-matches)]
     (count (clojure.set/intersection 
-      (set without-exact-matches) 
+      (set guess-without-exact-matches) 
       (set answer)))))
 
 (defn evaluate-guess [guess answer]
@@ -55,7 +55,6 @@
   (map validate-color-seq [guess answer])
   (let [exact-matches 
         (find-exact-matches guess answer)]
-    (let [inexact-match-count
-        (find-inexact-matches guess answer exact-matches)]
-      [(count exact-matches) inexact-match-count])))
+    [ (count exact-matches) 
+      (count-inexact-matches guess answer exact-matches) ]))
 
