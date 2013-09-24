@@ -45,6 +45,10 @@
 
 (defn count-inexact-matches [guess answer exact-matches]
   "Returns count of the inexact matches -- color and position -- between both sets"
+  ; This works because the number of inexact matches is just a set theory problem.
+  ; Specifically, counting them is just the intersection of the guess and answer,
+  ; after exact matches are removed. The same approach is much more code in Java 
+  ; because java.util.Set doesn't have set-theory methods like clojure.set.
   (let [guess-without-exact-matches (drop-elements-by-indexes guess exact-matches)]
     (count (clojure.set/intersection 
       (set guess-without-exact-matches) 
